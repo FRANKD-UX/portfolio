@@ -1,0 +1,107 @@
+{
+  "pencil": {
+    "bounds": [
+      239,
+      438,
+      352,
+      850
+    ],
+    "axis": [
+      [
+        257,
+        453
+      ],
+      [
+        339,
+        831
+      ]
+    ],
+    "radius": 95,
+    "displacement": 2.6,
+    "rotation": 0.65
+  },
+  "pen": {
+    "bounds": [
+      290,
+      498,
+      345,
+      743
+    ],
+    "axis": [
+      [
+        307,
+        515
+      ],
+      [
+        329,
+        726
+      ]
+    ],
+    "radius": 95,
+    "displacement": 2.2,
+    "rotation": 1.0
+  },
+  "usb": {
+    "bounds": [
+      168,
+      78,
+      299,
+      240
+    ],
+    "axis": [
+      [
+        263,
+        105
+      ],
+      [
+        203,
+        211
+      ]
+    ],
+    "radius": 80,
+    "displacement": 2.2,
+    "rotation": 1.0
+  },
+  "clip-left": {
+    "bounds": [
+      129,
+      222,
+      223,
+      337
+    ],
+    "axis": [
+      [
+        158,
+        242
+      ],
+      [
+        181,
+        309
+      ]
+    ],
+    "radius": 80,
+    "displacement": 2.2,
+    "rotation": 1.0
+  },
+  "clip-right": {
+    "bounds": [
+      234,
+      227,
+      322,
+      337
+    ],
+    "axis": [
+      [
+        262,
+        246
+      ],
+      [
+        282,
+        312
+      ]
+    ],
+    "radius": 80,
+    "displacement": 2.2,
+    "rotation": 1.0
+  }
+}

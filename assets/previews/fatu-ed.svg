@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="810" viewBox="0 0 1440 810" role="img" aria-label="Conceptual FATU.E.D visual, not a screenshot"><defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#0e1c40"/><stop offset=".68" stop-color="#204b86"/><stop offset="1" stop-color="#0d2b53"/></linearGradient><radialGradient id="shine"><stop stop-color="#c6a66b" stop-opacity=".9"/><stop offset="1" stop-color="#c6a66b" stop-opacity="0"/></radialGradient></defs>
+<rect width="1440" height="810" fill="#e9dfcf"/><rect x="35" y="34" width="1370" height="742" rx="22" fill="url(#bg)" stroke="#ceab67" stroke-width="4"/>
+<circle cx="1170" cy="420" r="320" fill="url(#shine)"/><path d="M1030 230C1160 290 1334 265 1350 390S1140 590 980 650" fill="none" stroke="#e9c68f" stroke-width="22" opacity=".6"/>
+<text x="106" y="150" fill="#dfc493" font-family="Georgia" font-size="72" font-weight="700" letter-spacing="2">FATU.E.D</text><line x1="105" y1="178" x2="1326" y2="178" stroke="#d6b877" stroke-width="3"/>
+<text x="108" y="315" fill="#e7e9f1" font-family="Arial" font-size="24" letter-spacing="8">A MULTI-DIVISION BUSINESS</text>
+<text x="105" y="431" fill="#fff8ef" font-family="Georgia" font-size="79">Trading.</text><text x="105" y="535" fill="#fff8ef" font-family="Georgia" font-size="79">Designs.</text><text x="105" y="639" fill="#fff8ef" font-family="Georgia" font-size="79">Future-focused.</text>
+<rect x="109" y="676" width="390" height="62" fill="#cfad6f"/><text x="152" y="716" fill="#16315b" font-family="Arial" font-size="24" font-weight="700">EXPLORE THE DIVISIONS ↗</text>
+<text x="968" y="724" fill="#f7e8d0" font-family="Arial" font-size="22" letter-spacing="5">EASTERN CAPE</text></svg>

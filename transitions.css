@@ -1,0 +1,336 @@
+/*
+  transitions.css — Animation Enhancement Layer
+  Frank Ndlovu Portfolio — v1.1 (Nov 2026)
+
+  WHAT THIS FILE DOES
+  -------------------
+  Extends v8.3 without touching any existing file. Drop it in and
+  add one <link> after concept.css in index.html.
+
+  WHY EACH SECTION EXISTS
+  -----------------------
+  The reference (minhngo.space) achieves its "alive" feeling through:
+    1. Objects spring into position (bounce easing, staggered per item)
+    2. Items float independently after landing — the box breathes
+    3. Hover shows a warm lift + glow, not just a pointer cursor
+    4. The lid arc is more dramatic on departure
+    5. Modals land closer to the viewport, not from far above
+
+  Minh's hover effect uses a separate hover.png per object — a designer
+  advantage we cannot replicate without new artwork. The CSS approach
+  below (radial glow + scale + translate lift) is functionally equivalent
+  and visually cleaner because it composes with the float.
+
+  TECHNIQUE NOTE: float uses the CSS `translate` property (independent
+  from `transform`) so it never conflicts with the spring entrance
+  transition which runs on `transform`. hover then overrides both.
+  All modern browsers (Chrome 104+, Firefox 104+, Safari 14.1+) support
+  this. prefers-reduced-motion is respected throughout.
+
+  v1.1 ADDITION — Section 9: stage edge vignette.
+  At viewports where the stage doesn't fill full width (e.g. 1600×747),
+  v8.3's capped scaling leaves side gaps filled by the blurred
+  body::before. The hard rectangular edge of the stage created a visible
+  seam. The vignette in Section 9 dissolves that seam.
+*/
+
+
+/* ============================================================
+   1. OBJECT ENTRANCE
+   v8.3 only transitions opacity. We add a transform spring so
+   each object lifts from 18px below and scales from 0.95 → 1.
+   cubic-bezier(0.17, 0.89, 0.32, 1.28) = spring with slight
+   overshoot — the object lands, dips a hair, settles.
+   ============================================================ */
+
+.concept-stage .object {
+  transform: translateY(18px) scale(0.95) !important;
+  transition:
+    opacity   0.35s ease,
+    transform 0.72s cubic-bezier(0.17, 0.89, 0.32, 1.28) !important;
+}
+
+.concept-stage .box.is-open .object {
+  transform: translateY(0) scale(1) !important;
+}
+
+/*
+  Stagger delays — objects land sequentially, not all at once.
+  Order in the DOM: 1=camera, 2=phone, 3=id, 4=folder, 5=swatch, 6=idea.
+  transition-delay applies to both opacity and transform simultaneously.
+*/
+.concept-stage .box.is-open .object:nth-child(1) { transition-delay: 0.04s; }
+.concept-stage .box.is-open .object:nth-child(2) { transition-delay: 0.12s; }
+.concept-stage .box.is-open .object:nth-child(3) { transition-delay: 0.20s; }
+.concept-stage .box.is-open .object:nth-child(4) { transition-delay: 0.28s; }
+.concept-stage .box.is-open .object:nth-child(5) { transition-delay: 0.36s; }
+.concept-stage .box.is-open .object:nth-child(6) { transition-delay: 0.44s; }
+
+
+/* ============================================================
+   2. IDLE FLOAT
+   The CSS `translate` property is independent from `transform`,
+   so it composes cleanly alongside the entrance transform and
+   the hover scale — no conflicts, no resets needed.
+
+   Each object gets a unique duration + delay so they drift out
+   of phase. This is what makes the reference feel "alive" rather
+   than mechanical. The 1s animation-delay on each gives the spring
+   entrance time to fully settle before the float begins.
+   ============================================================ */
+
+@keyframes concept-float {
+  0%, 100% { translate: 0 0px;  }
+  50%       { translate: 0 -5px; }
+}
+
+.concept-stage .box.is-open .object:nth-child(1) {
+  animation: concept-float 4.8s ease-in-out 1.0s infinite;
+}
+.concept-stage .box.is-open .object:nth-child(2) {
+  animation: concept-float 5.2s ease-in-out 1.4s infinite;
+}
+.concept-stage .box.is-open .object:nth-child(3) {
+  animation: concept-float 4.5s ease-in-out 0.8s infinite;
+}
+.concept-stage .box.is-open .object:nth-child(4) {
+  animation: concept-float 5.5s ease-in-out 1.2s infinite;
+}
+.concept-stage .box.is-open .object:nth-child(5) {
+  animation: concept-float 4.7s ease-in-out 1.6s infinite;
+}
+.concept-stage .box.is-open .object:nth-child(6) {
+  animation: concept-float 5.0s ease-in-out 0.6s infinite;
+}
+
+
+/* ============================================================
+   3. HOVER STATES
+   Three things happen simultaneously on hover:
+     a) Float animation pauses (animation-play-state)
+     b) Object lifts 8px via `translate` (overrides float position)
+     c) Object scales 1.03 via `transform` + warm drop-shadow
+
+   The quick 0.2s transition on hover entry makes it feel
+   responsive. We override concept.css's `transform:none!important`
+   with a more specific later rule — load order wins.
+
+   The ::after glow uses a radial gradient centred in the upper
+   third (where most objects have their visual mass) so the light
+   source reads as coming from above.
+   ============================================================ */
+
+.concept-stage .object:hover,
+.concept-stage .object:focus-visible {
+  animation-play-state: paused !important;
+  translate: 0 -8px !important;
+  transform: scale(1.03) !important;
+  filter:
+    brightness(1.09)
+    drop-shadow(0 10px 22px rgba(255, 115, 55, 0.22)) !important;
+  z-index: 15 !important;
+  transition:
+    transform 0.20s cubic-bezier(0.17, 0.89, 0.32, 1.1),
+    filter    0.20s ease,
+    translate 0.20s ease !important;
+}
+
+/* Warm radial glow — overrides the flat linear gradient in concept.css */
+.concept-stage .object::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: radial-gradient(
+    ellipse at 50% 35%,
+    rgba(255, 148, 80, 0.22) 0%,
+    transparent 65%
+  );
+  clip-path: inherit;
+  transition: opacity 0.20s ease;
+  pointer-events: none;
+}
+
+.concept-stage .object:hover::after,
+.concept-stage .object:focus-visible::after {
+  opacity: 1;
+}
+
+
+/* ============================================================
+   4. LID FLY-AWAY
+   Two changes from v8.3:
+     - More aggressive rotation (-21deg vs -19deg)
+     - Slightly more scale reduction on departure (0.80 vs 0.86)
+   This makes the lid feel physically thrown, not just moved.
+
+   Opacity starts fading at 76% of the 1120ms duration (~855ms),
+   so the lid is visually gone before app.js calls lid.hidden=true
+   at the existing 1050ms wait. No JS change needed.
+   ============================================================ */
+
+.concept-stage .concept-lid-skin {
+  transition:
+    transform 1.12s cubic-bezier(0.20, 0.86, 0.24, 1.03),
+    opacity   0.26s ease 0.76s !important;
+}
+
+.concept-stage .box.is-open .concept-lid-skin {
+  transform: translateY(-1140px) rotate(-21deg) scale(0.80) !important;
+  opacity: 0 !important;
+}
+
+
+/* ============================================================
+   5. CONCEPT ART CROSSFADE
+   The closed scene fades out fast (0.15s) so it doesn't linger.
+   The open scene fades in slightly slower (0.40s) to feel
+   deliberate — revealing the desk inside the box.
+   ============================================================ */
+
+.concept-art--open  { transition: opacity 0.40s ease 0.10s !important; }
+.concept-art--closed { transition: opacity 0.15s ease       !important; }
+
+
+/* ============================================================
+   6. MODAL ENTRY
+   Redefines @keyframes modal-in — later definition wins in CSS.
+   Changes from v8.3:
+     - translateY 90px → 55px (felt like it was falling from the
+       ceiling; now it surfaces from just below the viewport)
+     - rotate -3deg → -2deg (less aggressively tilted)
+     - scale 0.87 → 0.90 (starts closer to final size)
+   The existing spring cubic-bezier on .modal-host stays — we only
+   change where the animation starts, not the curve.
+   ============================================================ */
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(55px) rotate(-2deg) scale(0.90);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+
+/* ============================================================
+   7. REBOX BUTTON
+   Two-stage animation:
+     - rebox-appear: slides up and fades in after the box opens
+     - rebox-bob: gentle continuous bob to signal "you can close"
+
+   The bob starts 1.2s in — well after appear completes — so
+   they never visually overlap in an ugly way.
+   ============================================================ */
+
+@keyframes rebox-appear {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes rebox-bob {
+  0%, 100% { transform: translateY(0px);  }
+  50%       { transform: translateY(-3px); }
+}
+
+body.is-open .concept-stage .rebox {
+  animation:
+    rebox-appear 0.38s ease 0.5s both,
+    rebox-bob    2.60s ease-in-out 1.2s infinite !important;
+}
+
+
+/* ============================================================
+   8. PREFERS-REDUCED-MOTION
+   Strips all non-essential motion. Transitions snap to near-
+   instant. Animations are removed entirely. The site still
+   works — open/close, modals, hover states — just without
+   any animation for users who have requested that.
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .concept-stage .object,
+  .concept-stage .box.is-open .object:nth-child(1),
+  .concept-stage .box.is-open .object:nth-child(2),
+  .concept-stage .box.is-open .object:nth-child(3),
+  .concept-stage .box.is-open .object:nth-child(4),
+  .concept-stage .box.is-open .object:nth-child(5),
+  .concept-stage .box.is-open .object:nth-child(6) {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+    translate: 0 0 !important;
+    transform: none !important;
+  }
+
+  .concept-stage .concept-lid-skin,
+  .concept-art--open,
+  .concept-art--closed {
+    transition-duration: 0.01ms !important;
+  }
+
+  body.is-open .concept-stage .rebox {
+    animation: none !important;
+  }
+}
+
+
+/* ============================================================
+   9. STAGE EDGE VIGNETTE  (v1.1)
+
+   WHY THIS EXISTS
+   ---------------
+   v8.3 uses a capped cover-scaling strategy. At 1600×747, the
+   scene scales to ~1345px wide, leaving 127px side gaps. The
+   blurred body::before fills those gaps, but the stage has a
+   hard rectangular clip edge — the artwork cuts off sharply
+   where the blur begins, creating a visible seam.
+
+   HOW IT WORKS
+   ------------
+   .concept-stage::after is a full-inset pseudo-element at
+   z-index:4. That z-index slot sits:
+     - ABOVE concept-art layers (z-index 0 and 1)
+     - BELOW every interactive layer: box(5), objects(8),
+       lid(10), portrait(9), rebox(12), nav(16), dropdown(30)
+
+   The gradient fades from the exact stage background colour
+   (#121217) to transparent over 110px inward from each side.
+   The colour matches body::before's darkened blur tone, so the
+   stage edge dissolves into the background rather than cutting.
+
+   SAFE ZONE CONFIRMATION
+   ----------------------
+   The 110px vignette only covers the outer decorative desk area:
+     Leftmost interactive element  — object--folder: left 390px
+     Leftmost nav element          — nav: left 408px
+     Rightmost interactive element — object--idea: left 1250px
+   None are within 110px of either edge. pointer-events:none
+   ensures the pseudo-element never blocks any click target.
+   ============================================================ */
+
+.concept-stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+
+  /*
+    Two horizontal gradients composited in a single declaration.
+    CSS renders multiple backgrounds from first (top) to last (bottom).
+    Both run from #121217 at the edge to transparent at 110px inward.
+    The result is a smooth feather where the stage meets the blur.
+  */
+  background:
+    linear-gradient(to right, #121217 0px, transparent 110px),
+    linear-gradient(to left,  #121217 0px, transparent 110px);
+}
+
+/*
+  When the box is open, the concept art changes but the desk
+  edges remain the same dark tone. No state-based override needed.
+  The vignette is always active because the edge is always dark.
+*/

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+<title id="title">Conceptual illustration of Nomanova training website</title>
+<desc id="desc">Original portfolio illustration inspired by the repo's training content and blue/red Bootstrap site colors; not an actual screenshot.</desc>
+<defs>
+  <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#0a4678"/><stop offset="1" stop-color="#112a55"/></linearGradient>
+  <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffffff"/><stop offset="1" stop-color="#dfeaf6"/></linearGradient>
+  <filter id="shadow" x="-40%" y="-40%" width="180%" height="180%"><feDropShadow dx="0" dy="11" stdDeviation="13" flood-color="#051931" flood-opacity=".35"/></filter>
+</defs>
+<rect width="960" height="540" rx="28" fill="#0d1830"/><rect x="18" y="18" width="924" height="504" rx="20" fill="url(#bg)"/>
+<rect x="18" y="18" width="924" height="58" rx="20" fill="#0c244c"/><path d="M18 57h924v19H18z" fill="#0c244c"/>
+<circle cx="49" cy="46" r="6" fill="#f26866"/><circle cx="68" cy="46" r="6" fill="#ffd889"/><circle cx="87" cy="46" r="6" fill="#79c8bd"/>
+<text x="119" y="54" fill="#fff" font-family="Arial,sans-serif" font-size="25" font-weight="800" letter-spacing="2">NOMANOVA</text>
+<text x="666" y="51" fill="#b9cdec" font-family="Arial,sans-serif" font-size="13">SERVICES  ·  COURSES  ·  CONTACT</text>
+<text x="66" y="176" fill="#aed8ff" font-family="Arial,sans-serif" font-size="16" letter-spacing="3" font-weight="700">PROFESSIONAL DEVELOPMENT</text>
+<text x="66" y="233" fill="#fff" font-family="Arial,sans-serif" font-size="49" font-weight="800">Training for</text>
+<text x="66" y="292" fill="#fff" font-family="Arial,sans-serif" font-size="49" font-weight="800">real-world skills.</text>
+<rect x="66" y="324" width="192" height="47" rx="10" fill="#ed4c4d"/><text x="98" y="354" font-family="Arial,sans-serif" font-weight="700" font-size="17" fill="#fff">Explore courses  →</text>
+<g filter="url(#shadow)"><rect x="592" y="141" width="290" height="260" rx="15" fill="url(#panel)"/>
+<rect x="615" y="164" width="243" height="54" rx="9" fill="#e4ebf7"/><circle cx="642" cy="191" r="15" fill="#eb5a5e"/><text x="669" y="198" font-family="Arial,sans-serif" font-weight="700" font-size="21" fill="#1c3960">HSE Training</text>
+<rect x="615" y="231" width="243" height="54" rx="9" fill="#e4ebf7"/><circle cx="642" cy="257" r="15" fill="#5d8bc2"/><text x="669" y="264" font-family="Arial,sans-serif" font-weight="700" font-size="19" fill="#1c3960">Leadership</text>
+<rect x="615" y="299" width="243" height="54" rx="9" fill="#e4ebf7"/><circle cx="642" cy="326" r="15" fill="#70b6ad"/><text x="669" y="333" font-family="Arial,sans-serif" font-weight="700" font-size="19" fill="#1c3960">Management</text>
+<rect x="615" y="366" width="243" height="12" rx="6" fill="#cadaec"/>
+</g><path d="M30 469c131 -29 256 -44 380 -12s255 34 520-22v70H30z" fill="#153e70" fill-opacity=".58"/>
+</svg>

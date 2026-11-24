@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Frank Ndlovu — software developer, DevOps engineer and cloud builder. Unbox an interactive portfolio of projects, engineering, and ideas." />
+  <meta name="theme-color" content="#131317" />
+  <title>Frank Ndlovu — Portfolio Box</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="concept.css" />
+  <link rel="stylesheet" href="transitions.css" />
+  <link rel="stylesheet" href="phase2.css" />
+  <link rel="stylesheet" href="phase3a.css" />
+  <link rel="stylesheet" href="phase3b.css" />
+  <link rel="stylesheet" href="phase3c.css" />
+  <link rel="stylesheet" href="technical-content.css" />
+</head>
+<body>
+  <main class="stage concept-stage" id="stage" aria-label="Frank Ndlovu’s interactive portfolio box">
+    <!-- The approved open desk persists in every state. Only a crop of the
+         original closed lid moves; all desk props remain in artwork coordinates. -->
+    <div class="scene-canvas" id="sceneCanvas">
+    <div class="concept-art concept-art--open" aria-hidden="true">
+      <img src="assets/scenes/phase3a/open-labels-clean.webp" width="1672" height="941" alt="" draggable="false">
+      <img class="object-bed" src="assets/scenes/phase3a/object-bed.webp" width="1672" height="941" alt="" draggable="false">
+      <div class="concept-portrait concept-portrait--open"><img src="assets/profile/frank-portrait.jpg" alt=""></div>
+    </div>
+
+    <nav class="nav concept-nav" aria-label="Main navigation">
+      <button class="nav__brand" id="homeBtn" type="button" aria-label="Return to closed box"><span class="nav__dot"></span>Frank Ndlovu</button>
+      <div class="nav__right">
+        <button class="nav__link" type="button" data-open="about" aria-label="Open profile">Profile</button>
+        <div class="nav__projects">
+          <button class="nav__link" id="projectsToggle" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Open projects menu">Projects</button>
+          <div class="dropdown" id="navDropdown" role="menu">
+            <button type="button" role="menuitem" data-open="apps">Live Websites</button>
+            <button type="button" role="menuitem" data-open="projects">Apps &amp; Platforms</button>
+            <button type="button" role="menuitem" data-open="camera">Cloud &amp; DevOps</button>
+            <button type="button" role="menuitem" data-open="swatch">Security &amp; Integrations</button>
+            <button type="button" role="menuitem" data-open="brand">Ideas &amp; Ventures</button>
+          </div>
+        </div>
+        <button class="nav__link" type="button" data-open="contact" aria-label="Open contact information">Contact</button>
+      </div>
+    </nav>
+
+    <section class="box" id="box" aria-label="The interactive portfolio box">
+      <!-- Crop only the lid; its portrait shares the exact lid transform. -->
+      <div class="concept-lid-skin" aria-hidden="true">
+        <div class="concept-portrait concept-portrait--closed"><img src="assets/profile/frank-portrait.jpg" alt=""></div>
+      </div>
+      <div class="objects" id="objects">
+        <button class="object object--camera" type="button" data-open="apps" aria-label="View live websites"><span class="object__hint">Live Websites</span></button>
+        <button class="object object--phone" type="button" data-open="projects" aria-label="Explore apps and platforms"><span class="object__hint">Apps &amp; Platforms</span></button>
+        <button class="object object--id" type="button" data-open="about" aria-label="Open about Frank"><span class="object__hint">About Me</span></button>
+        <button class="object object--folder" type="button" data-open="camera" aria-label="Explore cloud and DevOps"><span class="object__hint">Cloud &amp; DevOps</span></button>
+        <button class="object object--swatch" type="button" data-open="swatch" aria-label="Explore security and integrations"><span class="object__hint">Security &amp; Integrations</span></button>
+        <button class="object object--idea" type="button" data-open="brand" aria-label="Explore ideas and ventures"><span class="object__hint">Ideas &amp; Ventures</span></button>
+      </div>
+      <button class="lid" id="lid" type="button" aria-label="Press to open Frank's portfolio box"><span class="sr-only">Press to open</span></button>
+    </section>
+
+    <button class="rebox" id="rebox" type="button">Close the box</button>
+    <span class="scene-caption">Frank Ndlovu · Interactive portfolio · 2026</span>
+    </div><!-- /.scene-canvas -->
+    <!-- Portrait UI uses real, visible category buttons; desktop hotspots are hidden. -->
+    <section class="portrait-ui" aria-label="Portfolio navigation on a small screen">
+      <div class="portrait-ui__top"><strong>Frank Ndlovu</strong><span>Software · Cloud · DevOps</span></div>
+      <button type="button" class="portrait-ui__open" id="portraitOpen" aria-label="Open portfolio box">Press to open</button>
+      <div class="portrait-ui__intro" aria-hidden="true"><span>Portfolio · 2026</span><h2>Built to create.<br>Engineered to ship.</h2><p>Backend systems, cloud architecture, DevOps and the websites bringing ideas to life.</p><div class="portrait-ui__chips"><i>.NET / C#</i><i>Azure</i><i>DevOps</i><i>Integrations</i></div></div>
+      <div class="portrait-ui__actions" id="portraitActions">
+        <p>Choose what to explore</p>
+        <button data-open="about" type="button">Profile &amp; Credentials</button>
+        <button data-open="apps" type="button">Live Websites</button>
+        <button data-open="projects" type="button">Apps &amp; Platforms</button>
+        <button data-open="camera" type="button">Cloud &amp; DevOps</button>
+        <button data-open="swatch" type="button">Security &amp; Integrations</button>
+        <button data-open="brand" type="button">Ideas &amp; Ventures</button>
+      </div>
+      <button type="button" class="portrait-ui__close" id="portraitClose">Close the box</button>
+    </section>
+  </main>
+  <div class="overlay" id="overlay" aria-hidden="true">
+    <button type="button" class="overlay__scrim" id="scrim" aria-label="Close overlay"></button>
+    <div class="modal-host" id="modalHost" role="dialog" aria-modal="true" tabindex="-1" aria-label="Portfolio details"></div>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

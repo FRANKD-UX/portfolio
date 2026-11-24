@@ -1,0 +1,125 @@
+/* Phase 3A: one shared transform for painted surface, label and hit region.
+   Artwork rotations are already present in the canonical pixels. */
+.concept-stage:not(.is-portrait) .object-bed {
+  position: absolute; inset: 0; width: 1672px; height: 941px;
+  pointer-events: none;
+}
+.concept-stage.is-portrait .object-bed { display: none; }
+.concept-stage .object__surface {
+  display: block; position: absolute; inset: 0; pointer-events: none;
+  filter: none; /* Retain the canonical baked resting shadow verbatim. */
+  transition: filter 280ms cubic-bezier(.2,.7,.2,1);
+}
+.concept-stage .object__surface > img { width: 100%; height: 100%; display: block; }
+.concept-stage .object__surface > .object__raised {
+  position: absolute; inset: 0; opacity: 0; transition: opacity 240ms ease;
+}
+.concept-stage .object:focus-visible .object__raised,
+.concept-stage .object:active .object__raised { opacity: 1; }
+@media (hover:hover) {
+  .concept-stage .object:hover .object__raised { opacity: 1; }
+}
+.concept-stage .object--layered,
+.concept-stage .box.is-open .object--layered {
+  clip-path: none;
+  transform: translateY(0) scale(1) !important;
+  translate: none !important;
+  transition: transform 280ms cubic-bezier(.2,.7,.2,1) !important;
+  pointer-events: none !important;
+}
+.concept-stage .object__hit {
+  position: absolute; inset: 0; clip-path: var(--object-clip);
+  pointer-events: auto;
+}
+.concept-stage .object--layered::after { display: none; }
+.concept-stage .object .object__hint {
+  display: flex !important; align-items: center; justify-content: center;
+  position: absolute; left: var(--label-x,50%); top: var(--label-y,50%);
+  width: var(--label-width,200px); min-width: 0; max-width: none;
+  padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none;
+  font: 700 var(--label-size,22px)/1.2 Inter,Arial,sans-serif;
+  color: var(--label-color,#fff); text-align: center;
+  text-shadow: var(--label-shadow,0 1px 3px #000b);
+  transform: translate(-50%,-50%) rotate(var(--label-angle,0deg)) !important;
+  opacity: 0; transition: opacity 240ms ease; pointer-events: none;
+  z-index: 12;
+}
+@media (hover:hover) {
+  .concept-stage .box.is-open .object--layered:hover {
+    transform: translateY(-10px) scale(1.035) !important;
+    z-index: 15 !important;
+  }
+  .concept-stage .object--layered:hover .object__surface {
+    filter: drop-shadow(0 13px 10px #0009);
+  }
+  .concept-stage .object:hover .object__hint { opacity: 1; }
+}
+.concept-stage .box.is-open .object--layered:focus-visible {
+  transform: translateY(-10px) scale(1.035) !important;
+  z-index: 15 !important;
+}
+.concept-stage .object--layered:focus-visible .object__surface {
+  filter: drop-shadow(0 13px 10px #0009);
+}
+.concept-stage .object:focus-visible .object__hint,
+.concept-stage .object:active .object__hint { opacity: 1; }
+.concept-stage .object--layered:active .object__surface {
+  filter: drop-shadow(0 5px 5px #0009);
+}
+.concept-stage .object--phone {
+  --label-x: 51%; --label-y: 62%; --label-width: 260px; --label-angle: -17deg;
+}
+.concept-stage .object--camera {
+  --label-x: 52%; --label-y: 83%; --label-width: 205px;
+  --label-angle: -10deg; --label-size: 20px;
+}
+.concept-stage .object--folder {
+  --label-x: 49%; --label-y: 64%; --label-width: 250px; --label-angle: 12deg;
+}
+.concept-stage .object--id {
+  --label-x: 57%; --label-y: 39%; --label-width: 160px; --label-angle: 5deg;
+  --label-color: #18191b; --label-shadow: none; --label-size: 25px;
+}
+.concept-stage .object--swatch {
+  --label-x: 53%; --label-y: 83%; --label-width: 230px;
+  --label-angle: 8deg; --label-size: 17px;
+}
+.concept-stage .object--idea {
+  --label-x: 61%; --label-y: 73%; --label-width: 150px;
+  --label-angle: -20deg; --label-size: 17px;
+  --label-color: #25252a; --label-shadow: 0 1px 2px #fff;
+}
+/* The existing photograph and opaque backing share the ID's transform.
+   Coordinates are the exact Phase 2 percentages expressed in this crop. */
+.concept-stage:not(.is-portrait) .concept-art--open::after,
+.concept-stage:not(.is-portrait) .concept-art--open > .concept-portrait--open { display: none; }
+.concept-stage .object--id .object__photo-cover {
+  position: absolute; left: calc(668.8px - var(--object-x)); top: calc(470.5px - var(--object-y));
+  width: 93.632px; height: 103.51px; background: #28232c;
+  border-radius: 4px; transform: rotate(6deg); pointer-events: none;
+}
+.concept-stage .object--id .concept-portrait--open {
+  position: absolute; left: calc(673.816px - var(--object-x)); top: calc(472.8525px - var(--object-y));
+  width: 91.124px; height: 98.805px; border: 0; border-radius: 4px;
+  transform: rotate(6deg); box-shadow: none; opacity: 1; transition: none;
+}
+.concept-stage .object--id .concept-portrait--open img {
+  width: 100%; height: 100%; object-fit: cover; object-position: 45% 29%;
+}
+/* The original, already-visible occluders remain above lower objects at rest. */
+.concept-stage .object--folder { z-index: 2 !important; }
+.concept-stage .object--camera { z-index: 3 !important; }
+.concept-stage .object--idea { z-index: 4 !important; }
+.concept-stage .object--swatch { z-index: 5 !important; }
+.concept-stage .object--id { z-index: 6 !important; }
+.concept-stage .object--phone { z-index: 7 !important; }
+@media (prefers-reduced-motion:reduce) {
+  .concept-stage .box.is-open .object--layered,
+  .concept-stage .box.is-open .object--layered:hover,
+  .concept-stage .box.is-open .object--layered:focus-visible {
+    transform: none !important; transition: none !important;
+  }
+  .concept-stage .object__surface,
+  .concept-stage .object .object__hint,
+  .concept-stage .object .object__raised { transition: none; }
+}

@@ -1,0 +1,36 @@
+/* Phase 4 changes are confined to content illustrations and case-study reading. */
+.technical-card{height:auto;aspect-ratio:600 / 230;background:var(--ui-canvas);display:block;overflow:hidden}
+.technical-card img{display:block;width:100%;height:100%;object-fit:contain}
+.case-hero{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)}
+.case-hero h1{line-height:1.15;overflow-wrap:anywhere}
+.case-hero>div,.case-section,.case-scroll{min-width:0}
+.case-technical-preview{width:100%;height:auto;border:1px solid var(--ui-border);border-radius:6px}
+.case-meta{margin-bottom:0}.case-meta dd{font-size:14px;line-height:1.6;font-weight:400}
+.case-status{font-size:14px!important;line-height:1.6;color:var(--ui-secondary);border-left:2px solid var(--ui-accent);padding-left:12px}
+.case-section p{max-width:78ch}
+.technical-figure{margin:22px 0 0}
+.technical-figure__viewport{overflow-x:auto;overscroll-behavior-x:contain;border:1px solid var(--ui-border);border-radius:6px;background:var(--ui-canvas);scrollbar-width:thin}
+.technical-figure__viewport:focus-visible{outline:2px solid var(--ui-accent);outline-offset:3px}
+.technical-figure img{display:block;width:100%;min-width:760px;height:auto}
+.technical-figure figcaption{font-size:14px;line-height:1.65;color:var(--ui-secondary);margin-top:12px}
+.technical-figure a{color:var(--ui-text);text-decoration:underline;text-underline-offset:3px;display:inline-block;margin-left:6px}
+.case-expandable{padding-top:26px;padding-bottom:26px}
+.case-expandable summary{cursor:pointer;display:list-item;list-style-position:outside;margin-left:20px}
+.case-expandable summary h2{display:inline;font-size:22px;line-height:1.4;margin:0}
+.case-expand-label{display:block;font-size:14px;color:var(--ui-secondary);margin-top:8px}
+.case-expandable details[open] .case-expand-label{display:none}
+.case-expandable details>div{padding-top:12px}
+.case-side{overflow-y:auto}
+@media(max-width:760px){
+ .case-hero{grid-template-columns:1fr}
+ .case-technical-preview{max-width:600px}
+ .case-section p,.case-section li,.case-hero p{font-size:16px}
+ .case-hero h1{font-size:30px}
+ .technical-figure img{min-width:760px}
+ .technical-figure figcaption::before{content:"Scroll horizontally to read the diagram, or open the full-size SVG. ";display:block;margin-bottom:6px}
+ .case-expandable summary h2{font-size:21px}
+}
+.device-preview.device-preview--illustrated{background:var(--ui-canvas)}
+.device-preview.device-preview--illustrated img{object-fit:contain}
+.live-detail__preview.live-detail__preview--illustrated{background:var(--ui-canvas)}
+.live-detail__preview.live-detail__preview--illustrated img{object-fit:contain;height:auto;width:100%}

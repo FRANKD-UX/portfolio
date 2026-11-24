@@ -1,0 +1,11 @@
+/* Decorative source-pixel layers share the stationary canonical desk in both
+   lid states. No controls, hit regions, layout changes or entrance animation. */
+.peripheral-desk { position: absolute; inset: 0; pointer-events: none; }
+.peripheral-surfaces { z-index: 6; }
+.concept-stage .peripheral-desk > img {
+  position: absolute; display: block; object-fit: fill; pointer-events: none;
+}
+.concept-stage.is-portrait .peripheral-desk { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .peripheral-desk .peripheral-object { transform: none !important; }
+}

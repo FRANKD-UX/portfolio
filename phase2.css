@@ -1,0 +1,137 @@
+/* Phase 2: the canonical open desk never switches, fades or moves with the lid.
+   Original scene images and both animation stylesheets remain unchanged. */
+.concept-stage .concept-art--open,
+body.is-open .concept-stage .concept-art--open {
+  opacity: 1;
+  transition: none !important;
+}
+body::before,
+body.is-open::before {
+  background-image: url('assets/scenes/open-concept.webp');
+}
+/* The closed lid is a non-destructive CSS crop of closed-concept.webp.
+   Its uniform 0.978 registration maps the original (342,203,1004,666)
+   lid to the canonical tray (334,201,982,652). No desk pixels travel. */
+.concept-stage .concept-lid-skin {
+  left: 334px;
+  top: 201px;
+  width: 982px;
+  height: 652px;
+  background-size: 1635.363px 920.38px;
+  background-position: -334.506px -198.552px;
+  clip-path: inset(0 round 67px);
+}
+/* The open desk's close label is baked into the image. Reveal it only when
+   the box is open; this small crop contains no persistent desk accessory. */
+.concept-art--open::before {
+  content: '';
+  position: absolute;
+  left: 745px;
+  top: 869px;
+  width: 180px;
+  height: 60px;
+  background: url('assets/scenes/open-concept.webp') -1040px -869px / 1672px 941px;
+}
+body.is-open .concept-art--open::before { visibility: hidden; }
+
+/* VIS-011: the inherited bottom fade and later vignette combine into a
+   100px-tall top band. Neither pseudo layer belongs over the laptop. */
+.concept-stage:not(.is-portrait)::after { display: none; }
+/* Keep the existing baked navigation lettering and its typography. The live
+   transparent buttons sit exactly over those labels, with visible focus rings. */
+.concept-stage .nav { left: 416px; top: 20px; width: 870px; height: 72px; }
+.concept-stage .nav__brand { position: absolute; left: 0; top: 0; width: 300px; height: 72px; padding: 0; }
+.concept-stage .nav__right { display: contents; }
+.concept-stage .nav__right > .nav__link[data-open='about'] { position: absolute; left: 450px; top: 0; width: 100px; height: 72px; padding: 0; }
+.concept-stage .nav__projects { position: absolute; left: 581px; top: 0; width: 132px; height: 72px; }
+.concept-stage #projectsToggle { width: 132px; height: 72px; padding: 0; }
+.concept-stage .nav__right > .nav__link[data-open='contact'] { position: absolute; left: 755px; top: 0; width: 115px; height: 72px; padding: 0; }
+/* VIS-003: the artwork is flattened. Moving invisible hit regions cannot
+   animate painted objects; keep their entrance/hover/idle geometry registered.
+   The existing glow and focus treatment still provide interaction feedback. */
+.concept-stage .object,
+.concept-stage .box.is-open .object,
+.concept-stage .object:hover,
+.concept-stage .object:focus-visible {
+  animation: none !important;
+  transform: none !important;
+  translate: none !important;
+  filter: none !important;
+}
+
+/* VIS-005: the source portrait beneath the supplied photograph is opaque.
+   Each photograph lives inside the layer it belongs to, so there is no second
+   independently timed lid flight or state-dependent photo fade. */
+.concept-stage .concept-art--open::after {
+  left: 40%; top: 50%; width: 5.6%; height: 11%;
+  border-radius: 4px; transform: rotate(6deg);
+}
+.concept-stage .concept-art--open .concept-portrait--open {
+  left: 40.3%; top: 50.25%; width: 5.45%; height: 10.5%;
+  border: 0; border-radius: 4px; transform: rotate(6deg);
+  box-shadow: none; opacity: 1; transition: none !important;
+}
+.concept-lid-skin::before {
+  content: ''; position: absolute;
+  left: 73.6%; top: 9.3%; width: 18%; height: 32%;
+  border-radius: 20%; background: #2b2930; box-shadow: 0 0 6px 3px #2b2930;
+}
+.concept-stage .concept-lid-skin .concept-portrait--closed {
+  left: 74.6%; top: 10.5%; width: 15.05%; height: 28.2%;
+  border-radius: 44% 44% 38% 38%; transform: rotate(5deg);
+  opacity: 1; transition: none !important;
+}
+/* Reuse the exact same crop in the existing portrait illustration. This is
+   the artwork's 1080/1672 display ratio, not a second scene-level transform. */
+.concept-stage.is-portrait .box .concept-lid-skin {
+  display: block !important;
+  left: 215.742px; top: 419.833px; width: 634.306px; height: 421.148px;
+  background-size: 1056.335px 594.504px;
+  background-position: -216.068px -128.251px;
+  clip-path: inset(0 round 43px);
+}
+.concept-stage.is-portrait .concept-lid-skin .concept-portrait--closed { top: 10.5% !important; border-width: 3px; }
+.concept-stage.is-portrait .concept-art--open .concept-portrait--open { top: 50.25% !important; }
+.concept-stage.is-portrait .concept-art--open::after { display: block !important; }
+.concept-stage.is-portrait .concept-art--open::before {
+  left: 44.56%; top: 92.35%; width: 10.77%; height: 6.38%;
+  background-size: 1080px 608px;
+  background-position: -671.77px -561.48px;
+}
+
+/* VIS-008: the 768px upright tablet previously had ~10px painted nav labels
+   and ~24px nav targets. Reuse the existing portrait menu at that width. */
+.portrait-layout body::before { display: none; }
+.concept-stage.is-portrait .portrait-ui__actions button { min-height: 132px; }
+.concept-stage.is-portrait .portrait-ui__close { top: 1980px; height: 132px; min-width: 450px; left: 315px; font-size: 35px; }
+/* Allow the illustration's moving lid to remain clipped to its original
+   portrait thumbnail rather than flying over the visible category menu. */
+.concept-stage.is-portrait .box { clip-path: inset(290px 0 1262px round 27px); }
+.concept-stage.is-portrait .portrait-ui__open { height: 132px; }
+.concept-stage.is-portrait .portrait-ui__actions button { font-size: 48px; }
+.concept-stage.is-portrait .portrait-ui__close { font-size: 42px; }
+.dossier-close { min-width: 44px; min-height: 44px; }
+
+/* VIS-010: exterior-only extension, registered to the canonical artwork.
+   No cover-fit, blur, state change or second scene transform. The original
+   1672 × 941 artwork still renders above this stationary background. */
+body::before,
+body.is-open::before {
+  inset: 0;
+  background-image: url('assets/scenes/desk-canonical-margin-extended.webp');
+  background-size: var(--desk-width) var(--desk-height);
+  background-position: var(--desk-x) var(--desk-y);
+  background-repeat: no-repeat;
+  filter: none;
+}
+/* The old opaque frame fill creates a dark antialias line where the
+   subpixel-scaled frame ends. The registered desk now supplies that fill. */
+.concept-stage:not(.is-portrait) { background: transparent !important; }
+.concept-stage:not(.is-portrait)::before { display: none; }
+/* Keep the inherited full-scene portrait image sizing off the nested photo.
+   This restores the supplied photo inside its existing ID-card frame. */
+.concept-stage.is-portrait .concept-art .concept-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
