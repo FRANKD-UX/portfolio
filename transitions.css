@@ -13,7 +13,7 @@
     1. Objects spring into position (bounce easing, staggered per item)
     2. Items float independently after landing — the box breathes
     3. Hover shows a warm lift + glow, not just a pointer cursor
-    4. The lid arc is more dramatic on departure
+    4. Phase 5A controls the removable lid with the Web Animations API
     5. Modals land closer to the viewport, not from far above
 
   Minh's hover effect uses a separate hover.png per object — a designer
@@ -157,28 +157,42 @@
 }
 
 
-/* ============================================================
-   4. LID FLY-AWAY
-   Two changes from v8.3:
-     - More aggressive rotation (-21deg vs -19deg)
-     - Slightly more scale reduction on departure (0.80 vs 0.86)
-   This makes the lid feel physically thrown, not just moved.
-
-   Opacity starts fading at 76% of the 1120ms duration (~855ms),
-   so the lid is visually gone before app.js calls lid.hidden=true
-   at the existing 1050ms wait. No JS change needed.
-   ============================================================ */
-
-.concept-stage .concept-lid-skin {
-  transition:
-    transform 1.12s cubic-bezier(0.20, 0.86, 0.24, 1.03),
-    opacity   0.26s ease 0.76s !important;
+/* 4. Phase 5A: a removable, opaque lid. The motion wrapper owns the
+   trajectory and external shadow; Phase 2 continues to own the exact crop. */
+.concept-stage .box {
+  --lid-open-ms: 2000;
+  --lid-close-ms: 2100;
+  --lid-travel: -1100px;
 }
-
-.concept-stage .box.is-open .concept-lid-skin {
-  transform: translateY(-1140px) rotate(-21deg) scale(0.80) !important;
-  opacity: 0 !important;
+.concept-stage.is-portrait .box { --lid-travel: -650px; }
+.concept-stage .box .concept-lid-skin {
+  transform: none !important;
+  opacity: 1 !important;
+  transition: none !important;
 }
+.concept-stage .lid-motion {
+  position: absolute; inset: 0; z-index: 9; pointer-events: none;
+  transform-origin: 825px 527px;
+}
+.concept-stage.is-portrait .lid-motion { transform-origin: 533px 630px; }
+.concept-stage .lid-motion[hidden] { display: none !important; }
+/* Objects' own hover z-indices stay inside their existing z-index:8 context.
+   Only the wrapper moves above that context; nav/modal contexts are unchanged. */
+.concept-stage .box:is(.is-opening,.is-closing) .objects { visibility: visible; }
+.concept-stage .box:is(.is-opening,.is-closing) .object {
+  opacity: 1 !important;
+}
+/* Native disabled + inert handle keyboard/focus. Gate the actual hit span too. */
+.concept-stage .box:not(.is-open) .object__hit { pointer-events: none !important; }
+.concept-stage .box:not(.is-open) .object--layered {
+  pointer-events: none !important;
+  transform: translateY(0) scale(1) !important;
+}
+.concept-stage .box:not(.is-open) .object__surface { filter: none !important; }
+.concept-stage .box:not(.is-open) .object__raised,
+.concept-stage .box:not(.is-open) .object .object__hint { opacity: 0 !important; }
+.concept-stage .box:not(.is-open) .object .object__hint { transition: none !important; }
+.concept-stage .box:is(.is-opening,.is-closing) .lid { visibility: hidden !important; pointer-events: none !important; }
 
 
 /* ============================================================

@@ -47,10 +47,12 @@
 
     <section class="box" id="box" aria-label="The interactive portfolio box">
       <!-- Crop only the lid; its portrait shares the exact lid transform. -->
-      <div class="concept-lid-skin" aria-hidden="true">
+      <div class="lid-motion" aria-hidden="true">
+      <div class="concept-lid-skin">
         <div class="concept-portrait concept-portrait--closed"><img src="assets/profile/frank-portrait.jpg" alt=""></div>
       </div>
-      <div class="objects" id="objects">
+      </div>
+      <div class="objects" id="objects" inert>
         <button class="object object--camera" type="button" data-open="apps" aria-label="View live websites"><span class="object__hint">Live Websites</span></button>
         <button class="object object--phone" type="button" data-open="projects" aria-label="Explore apps and platforms"><span class="object__hint">Apps &amp; Platforms</span></button>
         <button class="object object--id" type="button" data-open="about" aria-label="Open about Frank"><span class="object__hint">About Me</span></button>

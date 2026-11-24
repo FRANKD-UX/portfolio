@@ -60,26 +60,107 @@ async function intro() {
 }
 intro();
 
+// Phase 5A: classes describe rendering; only the settled open state is interactive.
+const lidMotion = $('.lid-motion');
+const objects = $('#objects');
+const portraitActions = $('.portrait-ui__actions');
+const motionPreference = matchMedia('(prefers-reduced-motion: reduce)');
+let artworkReady = false;
+let lidRun = 0;
+let activeLidAnimation = null;
+function gateObjects(enabled) {
+ objects.inert = !enabled;
+ portraitActions.inert = !enabled;
+ for (const button of $$('.objects button, .portrait-ui__actions button')) button.disabled = !enabled;
+}
+gateObjects(false);
+function setLidState(state) {
+ box.dataset.lidState = state;
+ for (const name of ['opening','open','closing']) box.classList.toggle('is-' + name, state === name);
+ opened = state !== 'closed';
+ animating = state === 'opening' || state === 'closing';
+ document.body.classList.toggle('is-open', state === 'opening' || state === 'open');
+ gateObjects(state === 'open');
+ lid.disabled = state !== 'closed' || !artworkReady;
+ $('#portraitOpen').disabled = state !== 'closed' || !artworkReady;
+ rebox.disabled = state !== 'open';
+ $('#portraitClose').disabled = state !== 'open';
+}
+setLidState('closed');
+const lidPose = (travel, tilt = 0, roll = 0) =>
+ `translate3d(0, calc(var(--lid-travel) * ${travel}), 0) perspective(2400px) rotateX(${tilt}deg) rotateZ(${roll}deg)`;
+const lidFrame = (offset, travel, tilt, roll, shadow, easing) => ({
+ offset, transform: lidPose(travel, tilt, roll), filter: `drop-shadow(${shadow})`, easing
+});
+const lidRest = lidFrame(0, 0, 0, 0, '0px 0px 0px #0000', 'cubic-bezier(.4,0,.7,.5)');
+const lidAway = lidFrame(1, 1, 8, -3, '0px 36px 30px #0000', 'linear');
+const lidOpening = [
+ lidRest,
+ lidFrame(.10, .008, 1, 0, '0px 5px 4px #0003', 'cubic-bezier(.3,.15,.6,.7)'),
+ lidFrame(.25, .065, 8, -2, '0px 18px 16px #0004', 'cubic-bezier(.35,.2,.55,.8)'),
+ lidFrame(.80, .82, 8, -3, '0px 36px 30px #0001', 'cubic-bezier(.2,.5,.4,1)'),
+ lidAway
+];
+const lidClosing = [
+ {...lidAway, offset: 0, easing: 'cubic-bezier(.4,0,.6,.8)'},
+ lidFrame(.48, .13, 8, -3, '0px 24px 22px #0004', 'cubic-bezier(.25,.3,.45,.8)'),
+ lidFrame(.76, .023, 3, -1, '0px 10px 9px #0003', 'cubic-bezier(.25,.4,.5,.85)'),
+ lidFrame(.93, .002, .4, -.1, '0px 2px 2px #0001', 'cubic-bezier(.2,.5,.4,1)'),
+ {...lidRest, offset: 1}
+];
+function moveLid(opening) {
+ // One timing source, also used for the bounded watchdog. No child events or
+ // unrelated object/portrait transitions can finish this run.
+ const duration = motionPreference.matches ? 0 : Number(getComputedStyle(box).getPropertyValue(opening ? '--lid-open-ms' : '--lid-close-ms'));
+ if (!duration) return Promise.resolve();
+ return new Promise(resolve => {
+  let timer;
+  const animation = lidMotion.animate(opening ? lidOpening : lidClosing, {duration, fill: 'both'});
+  activeLidAnimation = animation;
+  const finish = () => {
+   clearTimeout(timer);
+   motionPreference.removeEventListener('change', preferenceChanged);
+   if (activeLidAnimation === animation) activeLidAnimation = null;
+   resolve();
+  };
+  const preferenceChanged = () => { if (motionPreference.matches) animation.finish(); };
+  motionPreference.addEventListener('change', preferenceChanged);
+  // Cancellation also settles to the requested state; cleanup happens below.
+  animation.finished.then(finish, finish);
+  timer = setTimeout(() => { animation.cancel(); }, duration + Math.max(250, duration * .2));
+ });
+}
+async function runLid(opening) {
+ const run = ++lidRun;
+ const focused = document.activeElement;
+ const moveFocus = objects.contains(focused) || portraitActions.contains(focused) ||
+  [lid, rebox, $('#portraitOpen'), $('#portraitClose')].includes(focused);
+ if (moveFocus) $('#homeBtn').focus({preventScroll:true});
+ setLidState(opening ? 'opening' : 'closing');
+ // The wrapper is hidden only while open, never flashed at its resting pose:
+ // animate() installs the first closing keyframe in this same rendering task.
+ lidMotion.hidden = false;
+ try { await moveLid(opening); }
+ finally {
+  if (run === lidRun) {
+   lidMotion.hidden = opening;
+   // First establish the final render, then release the filled animation.
+   lid.hidden = opening;
+   setLidState(opening ? 'open' : 'closed');
+   for (const animation of lidMotion.getAnimations()) animation.cancel();
+   if (moveFocus) (opening ? (portrait.matches ? $('.portrait-ui__actions button') : rebox) :
+    (portrait.matches ? $('#portraitOpen') : lid)).focus({preventScroll:true});
+  }
+ }
+}
 async function openBox() {
- if(opened || animating) return;
- opened = true; animating = true;
- box.classList.add('is-open');
- document.body.classList.add('is-open');
- await wait(1140);
- lid.hidden = true;
- animating = false;
+ if (!artworkReady || opened || animating) return;
+ await runLid(true);
 }
 async function closeBox() {
- if(!opened || animating) return;
+ if (!opened || animating) return;
  hideModal();
- animating = true;
- lid.hidden = false;
- box.classList.remove('is-open');
- box.classList.add('is-closing');
- document.body.classList.remove('is-open');
- await wait(1140);
- box.classList.remove('is-closing');
- opened = false; animating = false;
+ await runLid(false);
 }
 lid.addEventListener('click', openBox);
 rebox.addEventListener('click',closeBox);
@@ -128,6 +209,11 @@ for (const [name, layer] of Object.entries(objectLayers)) {
  hit.className = 'object__hit'; hit.setAttribute('aria-hidden','true');
  object.prepend(surface, hit);
 }
+
+// Do not uncover the reconstructed bed until every extracted texture is decoded.
+await Promise.all($$('.object__surface img').map(image => image.decode()));
+artworkReady = true;
+setLidState('closed');
 
 // Peripheral setup is independent of all Phase 3A controls.
 import('./peripheral-interactions.js').then(({initPeripheralDesk}) => initPeripheralDesk(stage, overlay)).catch(console.error);
@@ -304,7 +390,10 @@ function hideModal(){
  host.innerHTML='';currentView=null;
  lastFocus?.focus?.({preventScroll:true});
 }
-$$('[data-open]').forEach(el=>el.addEventListener('click',()=>showModal(el.dataset.open)));
+$$('[data-open]').forEach(el=>el.addEventListener('click',()=>{
+ if ((objects.contains(el) || portraitActions.contains(el)) && (animating || !opened)) return;
+ showModal(el.dataset.open);
+}));
 $('#scrim').addEventListener('click',hideModal);
 host.addEventListener('click',e=>{
  const button=e.target.closest('button');
